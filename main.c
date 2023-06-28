@@ -6,7 +6,7 @@
 /*   By: yetay <yetay@student.42kl.edu.my>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/21 13:31:22 by yetay             #+#    #+#             */
-/*   Updated: 2023/06/28 14:10:23 by yetay            ###   ########.fr       */
+/*   Updated: 2023/06/28 15:20:38 by yetay            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -385,6 +385,97 @@ int	main(void)
 			ft_putres(x, y);
 			errors++;
 		}
+	}
+	// %% tests
+	i = 0;
+	freopen("stdout.ft_printf", "w", stdout);
+	x = ft_printf("%%");
+	fclose(stdout);
+	freopen("stdout.printf", "w", stdout);
+	y = printf("%%");
+	fclose(stdout);
+	freopen("/dev/stdout", "w", stdout);
+	if (x != y || ft_printf_isdiff())
+	{
+		ft_putstr_fd("%%", 2);
+		ft_puttest(i, "\"%%\"");
+		ft_putres(x, y);
+		errors++;
+	}
+	i = 1;
+	freopen("stdout.ft_printf", "w", stdout);
+	x = ft_printf("%%%%");
+	fclose(stdout);
+	freopen("stdout.printf", "w", stdout);
+	y = printf("%%%%");
+	fclose(stdout);
+	freopen("/dev/stdout", "w", stdout);
+	if (x != y || ft_printf_isdiff())
+	{
+		ft_putstr_fd("%%", 2);
+		ft_puttest(i, "\"%%%%\"");
+		ft_putres(x, y);
+		errors++;
+	}
+	i = 2;
+	freopen("stdout.ft_printf", "w", stdout);
+	x = ft_printf("%% %%");
+	fclose(stdout);
+	freopen("stdout.printf", "w", stdout);
+	y = printf("%% %%");
+	fclose(stdout);
+	freopen("/dev/stdout", "w", stdout);
+	if (x != y || ft_printf_isdiff())
+	{
+		ft_putstr_fd("%%", 2);
+		ft_puttest(i, "\"%% %%\"");
+		ft_putres(x, y);
+		errors++;
+	}
+	i = 3;
+	freopen("stdout.ft_printf", "w", stdout);
+	x = ft_printf("%");
+	fclose(stdout);
+	freopen("stdout.printf", "w", stdout);
+	y = printf("%");
+	fclose(stdout);
+	freopen("/dev/stdout", "w", stdout);
+	if (x != y || ft_printf_isdiff())
+	{
+		ft_putstr_fd("%%", 2);
+		ft_puttest(i, "\"%\"");
+		ft_putres(x, y);
+		errors++;
+	}
+	i = 4;
+	freopen("stdout.ft_printf", "w", stdout);
+	x = ft_printf("% %%");
+	fclose(stdout);
+	freopen("stdout.printf", "w", stdout);
+	y = printf("% %%");
+	fclose(stdout);
+	freopen("/dev/stdout", "w", stdout);
+	if (x != y || ft_printf_isdiff())
+	{
+		ft_putstr_fd("%%", 2);
+		ft_puttest(i, "\"% %%\"");
+		ft_putres(x, y);
+		errors++;
+	}
+	i = 5;
+	freopen("stdout.ft_printf", "w", stdout);
+	x = ft_printf("%% %%%");
+	fclose(stdout);
+	freopen("stdout.printf", "w", stdout);
+	y = printf("%% %%%");
+	fclose(stdout);
+	freopen("/dev/stdout", "w", stdout);
+	if (x != y || ft_printf_isdiff())
+	{
+		ft_putstr_fd("%%", 2);
+		ft_puttest(i, "\"%% %%%\"");
+		ft_putres(x, y);
+		errors++;
 	}
 	// %s tests
 	s[0] = "";
