@@ -6,7 +6,7 @@
 /*   By: yetay <yetay@student.42kl.edu.my>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/21 13:31:22 by yetay             #+#    #+#             */
-/*   Updated: 2023/06/28 17:12:19 by yetay            ###   ########.fr       */
+/*   Updated: 2023/06/28 18:23:12 by yetay            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -447,6 +447,88 @@ int	main(void)
 		ft_putres(x, y);
 		errors++;
 	}
+	// %s tests
+	s[0] = "";
+	s[1] = "\n";
+	s[2] = "A";
+	s[3] = "A cat is not a dog.";
+	s[4] = "The quick brown fox jumps over the lazy dog.";
+	s[5] = "The quick brown fox jumps over the lazy dog.\n";
+	s[6] = "Th!s is @ f^cking l0ng a$$ sentence with a p%rc&n+ char in it.";
+	s[7] = NULL;
+	i = -1;
+	while (++i < 8)
+	{
+		freopen("stdout.ft_printf", "w", stdout);
+		x = ft_printf("%s", s[i]);
+		fclose(stdout);
+		freopen("stdout.printf", "w", stdout);
+		y = printf("%s", s[i]);
+		fclose(stdout);
+		freopen("/dev/stdout", "w", stdout);
+		if (x != y || ft_printf_isdiff())
+		{
+			ft_putstr_fd("%s", 2);
+			ft_puttest(i, "\"%s\", s");
+			ft_putstr_fd("               s = ", 2);
+			ft_putendl_fd(s[i], 2);
+			ft_putres(x, y);
+			errors++;
+		}
+	}
+	// MIXED FORMATS
+	i = 0;
+	freopen("stdout.ft_printf", "w", stdout);
+	x = ft_printf("%s%c", s[4], '\n');
+	fclose(stdout);
+	freopen("stdout.printf", "w", stdout);
+	y = printf("%s%c", s[4], '\n');
+	fclose(stdout);
+	freopen("/dev/stdout", "w", stdout);
+	if (x != y || ft_printf_isdiff())
+	{
+		ft_putstr_fd("Mixed", 2);
+		ft_puttest(i, "\"%s%c\", s, '\\n'");
+		ft_putstr_fd("               s = ", 2);
+		ft_putendl_fd(s[4], 2);
+		ft_putres(x, y);
+		errors++;
+	}
+	i = 1;
+	freopen("stdout.ft_printf", "w", stdout);
+	x = ft_printf("%s (%p)", s[4], s[4]);
+	fclose(stdout);
+	freopen("stdout.printf", "w", stdout);
+	y = printf("%s (%p)", s[4], s[4]);
+	fclose(stdout);
+	freopen("/dev/stdout", "w", stdout);
+	if (x != y || ft_printf_isdiff())
+	{
+		ft_putstr_fd("Mixed", 2);
+		ft_puttest(i, "\"%s%c\", s, s");
+		ft_putstr_fd("               s = ", 2);
+		ft_putendl_fd(s[4], 2);
+		ft_putres(x, y);
+		errors++;
+	}
+	i = 2;
+	freopen("stdout.ft_printf", "w", stdout);
+	x = ft_printf("%d%% %s (%p)\n", 100, "working.", s[0]);
+	fclose(stdout);
+	freopen("stdout.printf", "w", stdout);
+	y = printf("%d%% %s (%p)\n", 100, "working.", s[0]);
+	fclose(stdout);
+	freopen("/dev/stdout", "w", stdout);
+	if (x != y || ft_printf_isdiff())
+	{
+		ft_putstr_fd("Mixed", 2);
+		ft_puttest(i, "\"%d%% %s (%p)\\n\", 100, \"working.\", s");
+		ft_putstr_fd("               s = ", 2);
+		ft_putendl_fd(s[0], 2);
+		ft_putres(x, y);
+		errors++;
+	}
+	// END OF TESTS
 	if (errors == 0)
 		ft_putendl_fd("All tests passed.", 2);
 	return (0);
