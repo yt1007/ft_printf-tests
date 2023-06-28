@@ -6,7 +6,7 @@
 #    By: yetay <yetay@student.42kl.edu.my>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/06/20 13:36:13 by yetay             #+#    #+#              #
-#    Updated: 2023/06/28 13:50:02 by yetay            ###   ########.fr        #
+#    Updated: 2023/06/28 18:23:46 by yetay            ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -33,4 +33,5 @@ mandatory:
 	@$(CC) $(CFLAGS) $(TEST_CFLAGS) \
 		-L$(DIR) -lftprintf $(INCLUDES) \
 		-o ft_printf $(addprefix $(DIR)/, $(DEPEND_SOURCES)) $(TEST_SOURCES) \
-		&& ./ft_printf && rm -rf ft_printf ft_printf.*/
+		&& ./ft_printf \
+		&& rm -rf ft_printf ft_printf.*/ stdout.*printf
