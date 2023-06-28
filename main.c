@@ -6,7 +6,7 @@
 /*   By: yetay <yetay@student.42kl.edu.my>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/21 13:31:22 by yetay             #+#    #+#             */
-/*   Updated: 2023/06/28 14:07:00 by yetay            ###   ########.fr       */
+/*   Updated: 2023/06/28 14:10:23 by yetay            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -257,6 +257,49 @@ int	main(void)
 			errors++;
 		}
 	}
+	// %p tests
+	i = -129;
+	while (++i < 128)
+	{
+		freopen("stdout.ft_printf", "w", stdout);
+		x = ft_printf("%p", i);
+		fclose(stdout);
+		freopen("stdout.printf", "w", stdout);
+		y = printf("%p", i);
+		fclose(stdout);
+		freopen("/dev/stdout", "w", stdout);
+		if (x != y || ft_printf_isdiff())
+		{
+			ft_putstr_fd("%p", 2);
+			ft_puttest(i, "\"%p\", i");
+			ft_putstr_fd("               i = ", 2);
+			ft_putnbr_fd(i, 2);
+			ft_putendl_fd("", 2);
+			ft_putres(x, y);
+			errors++;
+		}
+	}
+	i = -1;
+	while (++i < 9)
+	{
+		freopen("stdout.ft_printf", "w", stdout);
+		x = ft_printf("%p", l[i]);
+		fclose(stdout);
+		freopen("stdout.printf", "w", stdout);
+		y = printf("%p", l[i]);
+		fclose(stdout);
+		freopen("/dev/stdout", "w", stdout);
+		if (x != y || ft_printf_isdiff())
+		{
+			ft_putstr_fd("%p", 2);
+			ft_puttest(i, "\"%p\", i");
+			ft_putstr_fd("               i = ", 2);
+			ft_putnbr_fd(l[i], 2);
+			ft_putendl_fd("", 2);
+			ft_putres(x, y);
+			errors++;
+		}
+	}
 	// %x tests
 	i = -129;
 	while (++i < 128)
@@ -343,6 +386,15 @@ int	main(void)
 			errors++;
 		}
 	}
+	// %s tests
+	s[0] = "";
+	s[1] = "";
+	s[2] = "A";
+	s[3] = "A cat is not a dog.";
+	s[4] = "The quick brown fox jumps over the lazy dog.";
+	s[5] = "The quick brown fox jumps over the lazy dog.\n";
+	s[6] = "Th!s is @ f^cking l0ng a$$ sentence with a p%rc&n+ char in it.";
+	s[7] = NULL;
 	if (errors == 0)
 		ft_putendl_fd("All tests passed.", 2);
 	return (0);
