@@ -6,10 +6,11 @@
 /*   By: yetay <yetay@student.42kl.edu.my>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/21 13:31:22 by yetay             #+#    #+#             */
-/*   Updated: 2023/06/28 15:20:38 by yetay            ###   ########.fr       */
+/*   Updated: 2023/06/28 17:12:19 by yetay            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+#include <stdlib.h>
 #include <fcntl.h>
 #include <stdio.h>
 #include <unistd.h>
@@ -18,38 +19,7 @@
 
 static int	ft_printf_isdiff(void)
 {
-	int		x;
-	int		y;
-	char	a;
-	char	b;
-	int		rx;
-	int		ry;
-
-	x = open("stdout.ft_printf", O_RDONLY);
-	if (!x)
-		return (1);
-	y = open("stdout.printf", O_RDONLY);
-	if (!y)
-	{
-		close(x);
-		return (1);
-	}
-	rx = 1;
-	ry = 1;
-	while (rx || ry)
-	{
-		rx = read(x, &a, 1);
-		ry = read(y, &b, 1);
-		if (a != b)
-		{
-			close(x);
-			close(y);
-			return (1);
-		}
-	}
-	close(x);
-	close(y);
-	return (0);
+	return (system("/usr/bin/diff stdout.ft_printf stdout.printf > /dev/null"));
 }
 
 static void	ft_putfile_fd(char *fn, int fd)
@@ -144,7 +114,7 @@ int	main(void)
 			ft_putstr_fd("%d", 2);
 			ft_puttest(i, "\"%d\", i");
 			ft_putstr_fd("               i = ", 2);
-			ft_putnbr_fd(i, 2);
+			ft_putnbr_fd(i + 128, 2);
 			ft_putendl_fd("", 2);
 			ft_putres(x, y);
 			errors++;
@@ -187,7 +157,7 @@ int	main(void)
 			ft_putstr_fd("%i", 2);
 			ft_puttest(i, "\"%i\", i");
 			ft_putstr_fd("               i = ", 2);
-			ft_putnbr_fd(i, 2);
+			ft_putnbr_fd(i + 128, 2);
 			ft_putendl_fd("", 2);
 			ft_putres(x, y);
 			errors++;
@@ -230,7 +200,7 @@ int	main(void)
 			ft_putstr_fd("%u", 2);
 			ft_puttest(i, "\"%u\", i");
 			ft_putstr_fd("               i = ", 2);
-			ft_putnbr_fd(i, 2);
+			ft_putnbr_fd(i + 128, 2);
 			ft_putendl_fd("", 2);
 			ft_putres(x, y);
 			errors++;
@@ -273,7 +243,7 @@ int	main(void)
 			ft_putstr_fd("%p", 2);
 			ft_puttest(i, "\"%p\", i");
 			ft_putstr_fd("               i = ", 2);
-			ft_putnbr_fd(i, 2);
+			ft_putnbr_fd(i + 128, 2);
 			ft_putendl_fd("", 2);
 			ft_putres(x, y);
 			errors++;
@@ -316,7 +286,7 @@ int	main(void)
 			ft_putstr_fd("%x", 2);
 			ft_puttest(i, "\"%x\", i");
 			ft_putstr_fd("               i = ", 2);
-			ft_putnbr_fd(i, 2);
+			ft_putnbr_fd(i + 128, 2);
 			ft_putendl_fd("", 2);
 			ft_putres(x, y);
 			errors++;
@@ -359,7 +329,7 @@ int	main(void)
 			ft_putstr_fd("%X", 2);
 			ft_puttest(i, "\"%X\", i");
 			ft_putstr_fd("               i = ", 2);
-			ft_putnbr_fd(i, 2);
+			ft_putnbr_fd(i + 128, 2);
 			ft_putendl_fd("", 2);
 			ft_putres(x, y);
 			errors++;
@@ -477,15 +447,6 @@ int	main(void)
 		ft_putres(x, y);
 		errors++;
 	}
-	// %s tests
-	s[0] = "";
-	s[1] = "";
-	s[2] = "A";
-	s[3] = "A cat is not a dog.";
-	s[4] = "The quick brown fox jumps over the lazy dog.";
-	s[5] = "The quick brown fox jumps over the lazy dog.\n";
-	s[6] = "Th!s is @ f^cking l0ng a$$ sentence with a p%rc&n+ char in it.";
-	s[7] = NULL;
 	if (errors == 0)
 		ft_putendl_fd("All tests passed.", 2);
 	return (0);
