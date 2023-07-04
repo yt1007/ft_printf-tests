@@ -8,14 +8,14 @@ static void	expected_cases(int fd)
 
 	i = -1;
 	while (++i < 256)
-		ft_printf("%%c, i (0 - 255): %c\n", i);
+		yt_putnbrline_fd(ft_printf("%%c, i (0 - 255): %c\n", i), fd);
 }
 
 static void	exceptional_cases(int fd)
 {
-	ft_printf("%%c, INT_MIN: %c\n", INT_MIN);
-	ft_printf("%%c, -42: %c\n", -42);
-	ft_printf("%%c, -17: %c\n", -17);
+	yt_putnbrline_fd(ft_printf("%%c, INT_MIN: %c\n", INT_MIN), fd);
+	yt_putnbrline_fd(ft_printf("%%c, -42: %c\n", -42), fd);
+	yt_putnbrline_fd(ft_printf("%%c, -17: %c\n", -17), fd);
 }
 
 /* Prints a single character using the %c flag, */

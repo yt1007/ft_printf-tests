@@ -15,16 +15,16 @@ static void	expected_cases(int fd)
 	s[5] = "The quick brown fox jumps over the lazy dog.\n";
 	i = -1;
 	while (++i < 6)
-		ft_printf("%%s, s: %s\n", s[i]);
+		yt_putnbrline_fd(ft_printf("%%s, s: %s\n", s[i]), fd);
 }
 
 static void	exceptional_cases(int fd)
 {
 	char *s;
 
-	ft_printf("%%s, s (NULL): %s\n", NULL);
+	yt_putnbrline_fd(ft_printf("%%s, s (NULL): %s\n", NULL), fd);
 	s = "Th!s is @ f^cking l0ng $entence with a p%rc&n+ char in it.";
-	ft_printf("%%s, s (Sentence with percent symbol): %s\n", s);
+	yt_putnbrline_fd(ft_printf("%%s, s (Sentence with percent symbol): %s\n", s), fd);
 			
 }
 
