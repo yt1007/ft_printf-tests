@@ -1,36 +1,43 @@
 #include <limits.h>
 #include "ft_printf.h"
+#include "ft_printf_test.h"
 
-static void	expected_cases(void)
+static void	expected_cases(int fd)
 {
 	int	i;
 
 	i = -128;
 	while (++i < 128)
-		ft_printf("%%i, i (-128 - 127): %i\n", i);
-	ft_printf("%%i, INT_MIN: %i\n", INT_MIN);
-	ft_printf("%%i, INT_MAX: %i\n", INT_MAX);
+		yt_putnbrline_fd(ft_printf("%%i, i (-128 - 127): %i\n", i), fd);
+	yt_putnbrline_fd(ft_printf("%%i, INT_MIN: %i\n", INT_MIN), fd);
+	yt_putnbrline_fd(ft_printf("%%i, INT_MAX: %i\n", INT_MAX), fd);
 }
 
-static void	exceptional_cases(void)
+static void	exceptional_cases(int fd)
 {
-	ft_printf("%%i, NULL: %i\n", NULL);
-	ft_printf("%%i, INT_MIN: %i\n", INT_MIN - 1);
-	ft_printf("%%i, INT_MAX: %i\n", INT_MAX + 1);
-	ft_printf("%%i, UINT_MAX: %i\n", UINT_MAX);
-	ft_printf("%%i, LONG_MIN: %i\n", LONG_MIN);
-	ft_printf("%%i, LONG_MAX: %i\n", LONG_MAX);
-	ft_printf("%%i, ULONG_MAX: %i\n", ULONG_MAX);
-	ft_printf("%%i, LLONG_MIN: %i\n", LLONG_MIN);
-	ft_printf("%%i, LLONG_MAX: %i\n", LLONG_MAX);
-	ft_printf("%%i, ULLONG_MAX: %i\n", ULLONG_MAX);
+	yt_putnbrline_fd(ft_printf("%%i, NULL: %i\n", NULL), fd);
+	yt_putnbrline_fd(ft_printf("%%i, INT_MIN: %i\n", INT_MIN - 1), fd);
+	yt_putnbrline_fd(ft_printf("%%i, INT_MAX: %i\n", INT_MAX + 1), fd);
+	yt_putnbrline_fd(ft_printf("%%i, UINT_MAX: %i\n", UINT_MAX), fd);
+	yt_putnbrline_fd(ft_printf("%%i, LONG_MIN: %i\n", LONG_MIN), fd);
+	yt_putnbrline_fd(ft_printf("%%i, LONG_MAX: %i\n", LONG_MAX), fd);
+	yt_putnbrline_fd(ft_printf("%%i, ULONG_MAX: %i\n", ULONG_MAX), fd);
+	yt_putnbrline_fd(ft_printf("%%i, LLONG_MIN: %i\n", LLONG_MIN), fd);
+	yt_putnbrline_fd(ft_printf("%%i, LLONG_MAX: %i\n", LLONG_MAX), fd);
+	yt_putnbrline_fd(ft_printf("%%i, ULLONG_MAX: %i\n", ULLONG_MAX), fd);
 }
 
 /* Prints a decimal number using the %i flag, */
 /* followed by a new line. */
 int	main(void)
 {
-	expected_cases();
-	exceptional_cases();
+	int	fd;
+
+	fd = open("ft_printf.ret", O_WRONLY | O_CREAT);
+	if (fd < 0)
+		return (1);
+	expected_cases(fd);
+	exceptional_cases(fd);
+	close(fd);
 	return (0);
 }

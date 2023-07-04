@@ -1,7 +1,8 @@
 #include <limits.h>
 #include "ft_printf.h"
+#include "ft_printf_test.h"
 
-static void	expected_cases(void)
+static void	expected_cases(int fd)
 {
 	int	i;
 	char *s[6];
@@ -17,7 +18,7 @@ static void	expected_cases(void)
 		ft_printf("%%s, s: %s\n", s[i]);
 }
 
-static void	exceptional_cases(void)
+static void	exceptional_cases(int fd)
 {
 	char *s;
 
@@ -31,7 +32,13 @@ static void	exceptional_cases(void)
 /* followed by a new line. */
 int	main(void)
 {
-	expected_cases();
-	exceptional_cases();
+	int	fd;
+
+	fd = open("ft_printf.ret", O_WRONLY | O_CREAT);
+	if (fd < 0)
+		return (1);
+	expected_cases(fd);
+	exceptional_cases(fd);
+	close(fd);
 	return (0);
 }

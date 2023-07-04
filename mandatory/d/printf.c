@@ -1,36 +1,43 @@
 #include <limits.h>
 #include <stdio.h>
+#include "ft_printf_test.h"
 
-static void	expected_cases(void)
+static void	expected_cases(int fd)
 {
 	int	i;
 
 	i = -128;
 	while (++i < 128)
-		printf("%%d, i (-128 - 127): %d\n", i);
-	printf("%%d, INT_MIN: %d\n", INT_MIN);
-	printf("%%d, INT_MAX: %d\n", INT_MAX);
+		yt_putnbrline_fd(printf("%%d, i (-128 - 127): %d\n", i), fd);
+	yt_putnbrline_fd(printf("%%d, INT_MIN: %d\n", INT_MIN), fd);
+	yt_putnbrline_fd(printf("%%d, INT_MAX: %d\n", INT_MAX), fd);
 }
 
-static void	exceptional_cases(void)
+static void	exceptional_cases(int fd)
 {
-	printf("%%d, NULL: %d\n", NULL);
-	printf("%%d, INT_MIN: %d\n", INT_MIN - 1);
-	printf("%%d, INT_MAX: %d\n", INT_MAX + 1);
-	printf("%%d, UINT_MAX: %d\n", UINT_MAX);
-	printf("%%d, LONG_MIN: %d\n", LONG_MIN);
-	printf("%%d, LONG_MAX: %d\n", LONG_MAX);
-	printf("%%d, ULONG_MAX: %d\n", ULONG_MAX);
-	printf("%%d, LLONG_MIN: %d\n", LLONG_MIN);
-	printf("%%d, LLONG_MAX: %d\n", LLONG_MAX);
-	printf("%%d, ULLONG_MAX: %d\n", ULLONG_MAX);
+	yt_putnbrline_fd(printf("%%d, NULL: %d\n", NULL), fd);
+	yt_putnbrline_fd(printf("%%d, INT_MIN: %d\n", INT_MIN - 1), fd);
+	yt_putnbrline_fd(printf("%%d, INT_MAX: %d\n", INT_MAX + 1), fd);
+	yt_putnbrline_fd(printf("%%d, UINT_MAX: %d\n", UINT_MAX), fd);
+	yt_putnbrline_fd(printf("%%d, LONG_MIN: %d\n", LONG_MIN), fd);
+	yt_putnbrline_fd(printf("%%d, LONG_MAX: %d\n", LONG_MAX), fd);
+	yt_putnbrline_fd(printf("%%d, ULONG_MAX: %d\n", ULONG_MAX), fd);
+	yt_putnbrline_fd(printf("%%d, LLONG_MIN: %d\n", LLONG_MIN), fd);
+	yt_putnbrline_fd(printf("%%d, LLONG_MAX: %d\n", LLONG_MAX), fd);
+	yt_putnbrline_fd(printf("%%d, ULLONG_MAX: %d\n", ULLONG_MAX), fd);
 }
 
 /* Prints a decimal number using the %d flag, */
 /* followed by a new line. */
 int	main(void)
 {
-	expected_cases();
-	exceptional_cases();
+	int	fd;
+
+	fd = open("printf.ret", O_WRONLY | O_CREAT);
+	if (fd < 0)
+		return (1);
+	expected_cases(fd);
+	exceptional_cases(fd);
+	close(fd);
 	return (0);
 }

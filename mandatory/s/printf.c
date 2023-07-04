@@ -1,6 +1,7 @@
 #include <stdio.h>
+#include "ft_printf_test.h"
 
-static void	expected_cases(void)
+static void	expected_cases(int fd)
 {
 	int	i;
 	char *s[6];
@@ -13,16 +14,16 @@ static void	expected_cases(void)
 	s[5] = "The quick brown fox jumps over the lazy dog.\n";
 	i = -1;
 	while (++i < 6)
-		printf("%%s, s: %s\n", s[i]);
+		yt_putnbrline_fd(printf("%%s, s: %s\n", s[i]), fd);
 }
 
-static void	exceptional_cases(void)
+static void	exceptional_cases(int fd)
 {
 	char *s;
 
-	printf("%%s, s (NULL): %s\n", NULL);
+	yt_putnbrline_fd(printf("%%s, s (NULL): %s\n", NULL), fd);
 	s = "Th!s is @ f^cking l0ng $entence with a p%rc&n+ char in it.";
-	printf("%%s, s (Sentence with percent symbol): %s\n", s);
+	yt_putnbrline_fd(printf("%%s, s (Sentence with percent symbol): %s\n", s), fd);
 			
 }
 
@@ -30,7 +31,13 @@ static void	exceptional_cases(void)
 /* followed by a new line. */
 int	main(void)
 {
-	expected_cases();
-	exceptional_cases();
+	int	fd;
+
+	fd = open("printf.ret", O_WRONLY | O_CREAT);
+	if (fd < 0)
+		return (1);
+	expected_cases(fd);
+	exceptional_cases(fd);
+	close(fd);
 	return (0);
 }
