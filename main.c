@@ -6,7 +6,7 @@
 /*   By: yetay <yetay@student.42kl.edu.my>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/21 13:31:22 by yetay             #+#    #+#             */
-/*   Updated: 2023/07/05 16:41:30 by yetay            ###   ########.fr       */
+/*   Updated: 2023/07/05 17:32:42 by yetay            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,19 +37,24 @@ static int	ft_printf_ret_isdiff(void)
 
 int	main(int argc, char **argv)
 {
+	int	output_is_diff;
+	int	retval_is_diff;
+
 	if (argc != 2)
 		return (1);
 	write(2, "Running tests for ", 18);
 	write(2, argv[1], strlen(argv[1]));
 	write(2, "...", 3);
-	if (!ft_printf_out_isdiff() && !ft_printf_ret_isdiff())
+	output_is_diff = ft_printf_out_isdiff();
+	retval_is_diff = ft_printf_ret_isdiff();
+	if (output_is_diff || retval_is_diff)
+		write(2, " Tests FAILED. Check diffs.\n", 28);
+	else
 	{
 		write(2, " All tests passed.\n", 19);
 		unlink("diff.out");
 		unlink("diff.ret");
 	}
-	else
-		write(2, " Tests FAILED. Check diffs.\n", 28);
 	unlink("printf.out");
 	unlink("printf.ret");
 	unlink("ft_printf.out");
