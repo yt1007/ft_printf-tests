@@ -6,7 +6,7 @@
 #    By: yetay <yetay@student.42kl.edu.my>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/06/20 13:36:13 by yetay             #+#    #+#              #
-#    Updated: 2023/07/05 17:28:07 by yetay            ###   ########.fr        #
+#    Updated: 2023/07/05 18:21:37 by yetay            ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -24,7 +24,7 @@ DEPEND_SOURCES = ft_printf_test_utils.c
 
 MANDATORY_FLAGS = percent c d i p s u x_lower x_upper mixed
 
-.PHONY: mandatory $(MANDATORY_FLAGS)
+.PHONY: mandatory $(MANDATORY_FLAGS) fclean
 
 mandatory: $(MANDATORY_FLAGS)
 
@@ -44,3 +44,7 @@ main: main.c
 
 $(DIR)/$(NAME):
 	@make -C $(DIR)
+
+fclean:
+	@rm -rf main main.dSYM
+	@rm -rf diffs
