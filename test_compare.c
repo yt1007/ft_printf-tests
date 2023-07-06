@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   main.c                                             :+:      :+:    :+:   */
+/*   test_compare.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: yetay <yetay@student.42kl.edu.my>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/21 13:31:22 by yetay             #+#    #+#             */
-/*   Updated: 2023/07/05 17:32:42 by yetay            ###   ########.fr       */
+/*   Updated: 2023/07/06 14:43:35 by yetay            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,6 +35,9 @@ static int	ft_printf_ret_isdiff(void)
 	return (system("/usr/bin/diff -a printf.ret ft_printf.ret > diff.ret"));
 }
 
+/* Program compares printf.out to ft_printf.out and                           */
+/*                  printf.ret to ft_printf.ret                               */
+/* to identify differences between printf and ft_printf                       */
 int	main(int argc, char **argv)
 {
 	int	output_is_diff;
