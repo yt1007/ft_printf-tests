@@ -1,6 +1,4 @@
 #include <limits.h>
-#include <stdio.h>
-#include "ft_printf.h"
 #include "ft_printf_test.h"
 
  void	run_tests(int (*f)(const char *, ...), int fd)
