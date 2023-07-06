@@ -6,7 +6,7 @@
 #    By: yetay <yetay@student.42kl.edu.my>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/06/20 13:36:13 by yetay             #+#    #+#              #
-#    Updated: 2023/07/06 16:00:36 by yetay            ###   ########.fr        #
+#    Updated: 2023/07/06 19:10:10 by yetay            ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -15,20 +15,31 @@ CFLAGS = -Wno-integer-overflow
 TEST_CFLAGS =
 RM = rm -rf
 
-NAME = libftprintf.a
+NAME = ft_printf_tests
 
-DIR = ../ft_printf
+STATIC_LIBS = ftprintf ft
+LIB_AFNAMES = libftprintf.a libft.a
+LIB_DIRS = ../ft_printf ../ft_printf/libft
+USE_LIBS = $(addprefix -L, $(LIB_DIRS)) $(addprefix -l, $(STATIC_LIBS))
 
-INCLUDES = -I$(DIR) -I$(DIR)/libft -I.
+INC_DIRS = ../ft_printf ../ft_printf/libft .
+INCLUDES = $(addprefix -I, $(INC_DIRS))
 
-DEPEND_SOURCES = ft_printf_test_utils.c tests_main.c
+UTIL_SOURCES = ft_printf_test_utils.c
+MAIN_SOURCES = tests_main.c
+TEST_SOURCES = $(UTIL_SOURCES) $(MAIN_SOURCES)
+
+COMPARE = test_compare
+COMP_SOURCES = test_compare.c
+
+BUILDER = test_builder
+BLDR_SOURCER = test_builder.c
 
 CONVERSION_FLAGS = percent c d i p s u x_lower x_upper
 
 MANDATORY_FLAGS = $(addprefix mandatory/, $(CONVERSION_FLAGS) mixed)
 
 BONUS_SETS = b1 b2 bonus_all
-
 BONUS_FLAGS = $(foreach f, $(CONVERSION_FLAGS), bonus_test_$(f).c)
 
 TEST_OUTFILES = printf.out printf.ret ft_printf.out ft_printf.ret
@@ -42,15 +53,12 @@ mandatory: mmsg $(MANDATORY_FLAGS)
 mmsg:
 	@echo "MANDATORY TESTS"
 
-$(MANDATORY_FLAGS): %: %/test.c $(DEPEND_SOURCES) $(DIR)/$(NAME) test_compare
-	@$(CC) $(CFLAGS) $(TEST_CFLAGS) \
-		$(INCLUDES) \
-		-L$(DIR) -L$(DIR)/libft -lftprintf -lft \
-		-o ft_printf_test $(DEPEND_SOURCES) $< \
-		&& ./ft_printf_test \
+$(MANDATORY_FLAGS): %: %/test.c $(TEST_SOURCES) $(LIB_AFNAMES) $(COMPARE)
+	@$(CC) $(CFLAGS) $(TEST_CFLAGS) $(INCLUDES) $(USE_LIBS) -o $(NAME) $(TEST_SOURCES) $< \
+		&& ./$(NAME) \
 		&& chmod u+rw $(TEST_OUTFILES) \
-		&& $(RM) ft_printf_test ft_printf_test.dSYM
-	@./test_compare $(patsubst mandatory/%, mandatory_%, $@) \
+		&& $(RM) $(NAME) $(NAME).dSYM
+	@./$(COMPARE) $(patsubst mandatory/%, mandatory_%, $@) \
 		&& bash rename.sh $(patsubst mandatory/%, mandatory_%, $@)
 
 bonus: bmsg bonus_all
@@ -60,33 +68,40 @@ bmsg:
 
 bonus_all: $(BONUS_FLAGS)
 
-$(BONUS_FLAGS): test_builder test_compare
-	@./test_builder $(patsubst bonus_test_%.c, %, $@) \
+$(BONUS_FLAGS): $(BUILDER) $(TEST_SOURCES) $(LIB_AFNAMES) $(COMPARE)
+	@./$(BUILDER) $(patsubst bonus_test_%.c, %, $@) \
 		&& chmod u+rw auto_test.c \
 		&& mv auto_test.c $@
 	@$(CC) $(CFLAGS) $(TEST_CFLAGS) \
 		$(INCLUDES) \
 		-L$(DIR) -L$(DIR)/libft -lftprintf -lft \
-		-o ft_printf_test $(DEPEND_SOURCES) $@ \
-		&& $(RM) $@ \
-		&& ./ft_printf_test \
+		-o $(NAME) $(TEST_SOURCES) $@ \
+		&& ./$(NAME) \
 		&& chmod u+rw $(TEST_OUTFILES) \
-		&& $(RM) ft_printf_test ft_printf_test.dSYM
+		&& $(RM) $(NAME) $(NAME).dSYM
 	@./test_compare $(patsubst bonus_test_%.c, bonus_%, $@) \
 		&& bash rename.sh $(patsubst bonus_test_%.c, bonus_%, $@)
 
-$(CONVERSION_FLAGS):
+$(word 1, $(LIB_AFNAMES)): $(word 1, $(LIB_DIRS))
+	@make -C $(word 1, $(LIB_DIRS))
 
-test_compare: test_compare.c
+$(word 2, $(LIB_AFNAMES)): $(word 2, $(LIB_DIRS))
+	@make -C $(word 2, $(LIB_DIRS))
+
+$(BUILDER): %: %.c $(UTIL_SOURCES)
+	@$(CC) -I. $(UTIL_SOURCER) -o $@ $<
+
+$(COMPARE): %: %.c
 	@$(CC) $(CFLAGS) $(TEST_CFLAGS) -o $@ $<
 
-test_builder: test_builder.c ft_printf_test_utils.c
-	@$(CC) -I. ft_printf_test_utils.c -o $@ $<
-
-$(DIR)/$(NAME):
-	@make -C $(DIR)
-
-fclean:
-	@$(RM) test_compare test_compare.dSYM
-	@$(RM) test_builder test_builder.dSYM
+clean:
+	@$(RM) $(COMPARE) $(COMPARE).dSYM
+	@$(RM) $(BONUS_FLAGS)
+	@$(RM) $(BUILDER) $(BUILDER).dSYM
 	@$(RM) diffs
+
+fclean: clean
+	@make -C $(word 1, $(LIB_DIRS)) fclean
+	@make -C $(word 2, $(LIB_DIRS)) fclean
+
+re: fclean mandatory
