@@ -6,7 +6,7 @@
 /*   By: yetay <yetay@student.42kl.edu.my>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/06 11:12:57 by yetay             #+#    #+#             */
-/*   Updated: 2023/07/06 14:48:01 by yetay            ###   ########.fr       */
+/*   Updated: 2023/07/06 14:50:47 by yetay            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@ int	main(int argc, char **argv)
 {
 	int	fd;
 
-	fd = open("test.c", O_WRONLY | O_CREAT);
+	fd = open("auto_test.c", O_WRONLY | O_CREAT);
 	if (fd < 0)
 		return (1);
 	yt_putline_fd("#include <stdio.h>", fd);
