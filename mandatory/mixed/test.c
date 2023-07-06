@@ -2,7 +2,7 @@
 #include "ft_printf.h"
 #include "ft_printf_test.h"
 
-static void	expected_cases(int (*f)(const char *, ...), int fd)
+ void	run_tests(int (*f)(const char *, ...), int fd)
 {
 	int	i;
 	char *s[6];
@@ -16,29 +16,4 @@ static void	expected_cases(int (*f)(const char *, ...), int fd)
 	yt_putnbrline_fd(f("%%s%%c, s (sentence w/o nl), c (new line char): %s%c", s[4], '\n'), fd);
 	yt_putnbrline_fd(f("%%s (%%p)\\n, s (sentence), s (sentence): %s (%p)\n", s[4], s[4]), fd);
 	yt_putnbrline_fd(f("%%d%%%% %%s (%%p)\\n, 100, \"pass\", s[0]: %d%% %s (%p)\n", 100, "pass", s[0]), fd);
-}
-
-/* Prints a string of characters from a mixed set of values using a mix of */
-/* the %c, %d, %i, %p, %s, %u, %x, %X, and %% flags, followed by a new line. */
-int	main(void)
-{
-	int	fd;
-
-	freopen("printf.out", "w", stdout);
-	fd = open("printf.ret", O_WRONLY | O_CREAT);
-	if (fd < 0)
-		return (1);
-	expected_cases(&printf, fd);
-	close(fd);
-	fclose(stdout);
-	freopen("/dev/stdout", "w", stdout);
-	freopen("ft_printf.out", "w", stdout);
-	fd = open("ft_printf.ret", O_WRONLY | O_CREAT);
-	if (fd < 0)
-		return (1);
-	expected_cases(&ft_printf, fd);
-	close(fd);
-	fclose(stdout);
-	freopen("/dev/stdout", "w", stdout);
-	return (0);
 }
