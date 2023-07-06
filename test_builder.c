@@ -6,7 +6,7 @@
 /*   By: yetay <yetay@student.42kl.edu.my>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/06 11:12:57 by yetay             #+#    #+#             */
-/*   Updated: 2023/07/06 16:01:25 by yetay            ###   ########.fr       */
+/*   Updated: 2023/07/06 17:36:33 by yetay            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,17 @@ int	main(int argc, char **argv)
 	yt_putline_fd("", fd);
 	yt_putline_fd("void\trun_tests(int (*f)(const char *, ...), int fd)", fd);
 	yt_putline_fd("{", fd);
-	test_builder(*argv[1], "-0# +", fd);
+	if (*argv[1] == 'p' && argv[1][1] == 'e')
+		test_builder('%', "-0# +", fd);
+	else if (*argv[1] == 'x')
+	{
+		if (argv[1][2] == 'l')
+			test_builder('x', "-0# +", fd);
+		else
+			test_builder('X', "-0# +", fd);
+	}
+	else
+		test_builder(*argv[1], "-0# +", fd);
 	yt_putline_fd("}", fd);
 	close(fd);
 	return (0);
