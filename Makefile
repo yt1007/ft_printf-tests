@@ -6,7 +6,7 @@
 #    By: yetay <yetay@student.42kl.edu.my>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/06/20 13:36:13 by yetay             #+#    #+#              #
-#    Updated: 2023/07/06 19:10:10 by yetay            ###   ########.fr        #
+#    Updated: 2023/07/06 19:20:36 by yetay            ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -44,9 +44,11 @@ BONUS_FLAGS = $(foreach f, $(CONVERSION_FLAGS), bonus_test_$(f).c)
 
 TEST_OUTFILES = printf.out printf.ret ft_printf.out ft_printf.ret
 
-.PHONY: mandatory mmsg $(MANDATORY_FLAGS) \
+.PHONY: all mandatory mmsg $(MANDATORY_FLAGS) \
 	bonus bmsg $(BONUS_SETS) $(BONUS_FLAGS) \
 	$(CONVERSION_FLAGS) fclean
+
+all: mandatory bonus
 
 mandatory: mmsg $(MANDATORY_FLAGS)
 
@@ -54,7 +56,8 @@ mmsg:
 	@echo "MANDATORY TESTS"
 
 $(MANDATORY_FLAGS): %: %/test.c $(TEST_SOURCES) $(LIB_AFNAMES) $(COMPARE)
-	@$(CC) $(CFLAGS) $(TEST_CFLAGS) $(INCLUDES) $(USE_LIBS) -o $(NAME) $(TEST_SOURCES) $< \
+	@$(CC) $(CFLAGS) $(TEST_CFLAGS) $(INCLUDES) $(USE_LIBS) \
+		-o $(NAME) $(TEST_SOURCES) $< \
 		&& ./$(NAME) \
 		&& chmod u+rw $(TEST_OUTFILES) \
 		&& $(RM) $(NAME) $(NAME).dSYM
@@ -72,14 +75,12 @@ $(BONUS_FLAGS): $(BUILDER) $(TEST_SOURCES) $(LIB_AFNAMES) $(COMPARE)
 	@./$(BUILDER) $(patsubst bonus_test_%.c, %, $@) \
 		&& chmod u+rw auto_test.c \
 		&& mv auto_test.c $@
-	@$(CC) $(CFLAGS) $(TEST_CFLAGS) \
-		$(INCLUDES) \
-		-L$(DIR) -L$(DIR)/libft -lftprintf -lft \
+	@$(CC) $(CFLAGS) $(TEST_CFLAGS) $(INCLUDES) $(USE_LIBS) \
 		-o $(NAME) $(TEST_SOURCES) $@ \
 		&& ./$(NAME) \
 		&& chmod u+rw $(TEST_OUTFILES) \
 		&& $(RM) $(NAME) $(NAME).dSYM
-	@./test_compare $(patsubst bonus_test_%.c, bonus_%, $@) \
+	@./$(COMPARE) $(patsubst bonus_test_%.c, bonus_%, $@) \
 		&& bash rename.sh $(patsubst bonus_test_%.c, bonus_%, $@)
 
 $(word 1, $(LIB_AFNAMES)): $(word 1, $(LIB_DIRS))
@@ -89,7 +90,7 @@ $(word 2, $(LIB_AFNAMES)): $(word 2, $(LIB_DIRS))
 	@make -C $(word 2, $(LIB_DIRS))
 
 $(BUILDER): %: %.c $(UTIL_SOURCES)
-	@$(CC) -I. $(UTIL_SOURCER) -o $@ $<
+	@$(CC) -I. $(UTIL_SOURCES) -o $@ $<
 
 $(COMPARE): %: %.c
 	@$(CC) $(CFLAGS) $(TEST_CFLAGS) -o $@ $<
