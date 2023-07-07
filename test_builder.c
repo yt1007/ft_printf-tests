@@ -6,7 +6,7 @@
 /*   By: yetay <yetay@student.42kl.edu.my>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/06 11:12:57 by yetay             #+#    #+#             */
-/*   Updated: 2023/07/06 17:36:33 by yetay            ###   ########.fr       */
+/*   Updated: 2023/07/07 10:59:11 by yetay            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,6 +79,50 @@ static void	var_builder(char f, int fd)
 	write(fd, ";\n", 2);
 }
 
+static void	put_test(char f, char a, char b, char c, char d, char e, int minlen, int prcn, int fd)
+{
+	write(fd, "\tf(\"%%", 6);
+	write(fd, &a, 1);
+	if (b)
+		write(fd, &b, 1);
+	if (c)
+		write(fd, &c, 1);
+	if (d)
+		write(fd, &d, 1);
+	if (e)
+		write(fd, &e, 1);
+	if (minlen)
+		yt_putnbr_fd(minlen, fd);
+	if (prcn)
+	{
+		write(fd, ".", 1);
+		yt_putnbr_fd(prcn, fd);
+	}
+	write(fd, &f, 1);
+	write(fd, "\\\\n:%", 5);
+	write(fd, &a, 1);
+	if (b)
+		write(fd, &b, 1);
+	if (c)
+		write(fd, &c, 1);
+	if (d)
+		write(fd, &d, 1);
+	if (e)
+		write(fd, &e, 1);
+	if (minlen)
+		yt_putnbr_fd(minlen, fd);
+	if (prcn)
+	{
+		write(fd, ".", 1);
+		yt_putnbr_fd(prcn, fd);
+	}
+	write(fd, &f, 1);
+	write(fd, "\\n\"", 3);
+	if (f != '%')
+		write(fd, ", x", 3);
+	write(fd, ");\n", 3);
+}
+
 static void	test_builder(char f, char *flags, int fd)
 {
 	int	a;
@@ -86,81 +130,41 @@ static void	test_builder(char f, char *flags, int fd)
 	int	c;
 	int	d;
 	int	e;
-	int	p[3];
+	int	p[5];
 	int	minlen;
 	int	prcn;
 
 	p[0] = 0;
-	p[1] = 4;
-	p[2] = 8;
+	p[1] = 1;
+	p[2] = 2;
+	p[3] = 4;
+	p[4] = 8;
 	if (f != '%')
 		var_builder(f, fd);
 	minlen = -1;
-	while (++minlen < 3)
+	while (++minlen < 5)
 	{
 		prcn = -1;
-		while (++prcn < 3)
+		while (++prcn < 5)
 		{
 			if (minlen > 0 && prcn > 0 && minlen == prcn)
 				continue ;
 			a = -1;
 			while (flags[++a])
 			{
-				write(fd, "\tf(\"%", 5);
-				write(fd, &flags[a], 1);
-				if (p[minlen])
-					yt_putnbr_fd(p[minlen], fd);
-				if (p[prcn])
-				{
-					write(fd, ".", 1);
-					yt_putnbr_fd(p[prcn], fd);
-				}
-				write(fd, &f, 1);
-				write(fd, "\\n\"", 3);
-				if (f != '%')
-					write(fd, ", x", 3);
-				write(fd, ");\n", 3);
+				put_test(f, flags[a], 0, 0, 0, 0, p[minlen], p[prcn], fd);
 				b = -1;
 				while (flags[++b])
 				{
 					if (flags[a] == flags[b])
 						continue ;
-					write(fd, "\tf(\"%", 5);
-					write(fd, &flags[a], 1);
-					write(fd, &flags[b], 1);
-					if (p[minlen])
-						yt_putnbr_fd(p[minlen], fd);
-					if (p[prcn])
-					{
-						write(fd, ".", 1);
-						yt_putnbr_fd(p[prcn], fd);
-					}
-					write(fd, &f, 1);
-					write(fd, "\\n\"", 3);
-					if (f != '%')
-						write(fd, ", x", 3);
-					write(fd, ");\n", 3);
+					put_test(f, flags[a], flags[b], 0, 0, 0, p[minlen], p[prcn], fd);
 					c = -1;
 					while (flags[++c])
 					{
 						if (flags[a] == flags[c] || flags[b] == flags[c])
 							continue ;
-						write(fd, "\tf(\"%", 5);
-						write(fd, &flags[a], 1);
-						write(fd, &flags[b], 1);
-						write(fd, &flags[c], 1);
-						if (p[minlen])
-							yt_putnbr_fd(p[minlen], fd);
-						if (p[prcn])
-						{
-							write(fd, ".", 1);
-							yt_putnbr_fd(p[prcn], fd);
-						}
-						write(fd, &f, 1);
-						write(fd, "\\n\"", 3);
-						if (f != '%')
-							write(fd, ", x", 3);
-						write(fd, ");\n", 3);
+						put_test(f, flags[a], flags[b], flags[c], 0, 0, p[minlen], p[prcn], fd);
 						d = -1;
 						while (flags[++d])
 						{
@@ -170,23 +174,7 @@ static void	test_builder(char f, char *flags, int fd)
 								continue ;
 							if (flags[c] == flags[d])
 								continue ;
-							write(fd, "\tf(\"%", 5);
-							write(fd, &flags[a], 1);
-							write(fd, &flags[b], 1);
-							write(fd, &flags[c], 1);
-							write(fd, &flags[d], 1);
-							if (p[minlen])
-								yt_putnbr_fd(p[minlen], fd);
-							if (p[prcn])
-							{
-								write(fd, ".", 1);
-								yt_putnbr_fd(p[prcn], fd);
-							}
-							write(fd, &f, 1);
-							write(fd, "\\n\"", 3);
-							if (f != '%')
-								write(fd, ", x", 3);
-							write(fd, ");\n", 3);
+							put_test(f, flags[a], flags[b], flags[c], flags[d], 0, p[minlen], p[prcn], fd);
 							e = -1;
 							while (flags[++e])
 							{
@@ -198,24 +186,7 @@ static void	test_builder(char f, char *flags, int fd)
 									continue ;
 								if (flags[d] == flags[e])
 									continue ;
-								write(fd, "\tf(\"%", 5);
-								write(fd, &flags[a], 1);
-								write(fd, &flags[b], 1);
-								write(fd, &flags[c], 1);
-								write(fd, &flags[d], 1);
-								write(fd, &flags[e], 1);
-								if (p[minlen])
-									yt_putnbr_fd(p[minlen], fd);
-								if (p[prcn])
-								{
-									write(fd, ".", 1);
-									yt_putnbr_fd(p[prcn], fd);
-								}
-								write(fd, &f, 1);
-								write(fd, "\\n\"", 3);
-								if (f != '%')
-									write(fd, ", x", 3);
-								write(fd, ");\n", 3);
+								put_test(f, flags[a], flags[b], flags[c], flags[d], flags[e], p[minlen], p[prcn], fd);
 							}
 						}
 					}
