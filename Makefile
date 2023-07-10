@@ -6,23 +6,23 @@
 #    By: yetay <yetay@student.42kl.edu.my>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/06/20 13:36:13 by yetay             #+#    #+#              #
-#    Updated: 2023/07/06 19:20:36 by yetay            ###   ########.fr        #
+#    Updated: 2023/07/10 12:56:32 by yetay            ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 CC = cc
 CFLAGS = -Wno-integer-overflow
-TEST_CFLAGS =
+TEST_CFLAGS = 
 RM = rm -rf
 
 NAME = ft_printf_tests
 
-STATIC_LIBS = ftprintf ft
-LIB_AFNAMES = libftprintf.a libft.a
-LIB_DIRS = ../ft_printf ../ft_printf/libft
+STATIC_LIBS = ftprintf
+LIB_AFNAMES = libftprintf.a
+LIB_DIRS = ../ft_printf
 USE_LIBS = $(addprefix -L, $(LIB_DIRS)) $(addprefix -l, $(STATIC_LIBS))
 
-INC_DIRS = ../ft_printf ../ft_printf/libft .
+INC_DIRS = ../ft_printf .
 INCLUDES = $(addprefix -I, $(INC_DIRS))
 
 UTIL_SOURCES = ft_printf_test_utils.c
@@ -44,15 +44,17 @@ BONUS_FLAGS = $(foreach f, $(CONVERSION_FLAGS), bonus_test_$(f).c)
 
 TEST_OUTFILES = printf.out printf.ret ft_printf.out ft_printf.ret
 
-.PHONY: all mandatory mmsg $(MANDATORY_FLAGS) \
-	bonus bmsg $(BONUS_SETS) $(BONUS_FLAGS) \
+.PHONY: all mandatory mprep $(MANDATORY_FLAGS) \
+	bonus bprep $(BONUS_SETS) $(BONUS_FLAGS) \
 	$(CONVERSION_FLAGS) fclean
 
 all: mandatory bonus
 
-mandatory: mmsg $(MANDATORY_FLAGS)
+mandatory: mprep $(MANDATORY_FLAGS)
 
-mmsg:
+mprep:
+	@make -C $(word 1, $(LIB_DIRS)) fclean
+	@make -C $(word 1, $(LIB_DIRS))
 	@echo "MANDATORY TESTS"
 
 $(MANDATORY_FLAGS): %: %/test.c $(TEST_SOURCES) $(LIB_AFNAMES) $(COMPARE)
@@ -64,14 +66,16 @@ $(MANDATORY_FLAGS): %: %/test.c $(TEST_SOURCES) $(LIB_AFNAMES) $(COMPARE)
 	@./$(COMPARE) $(patsubst mandatory/%, mandatory_%, $@) \
 		&& bash rename.sh $(patsubst mandatory/%, mandatory_%, $@)
 
-bonus: bmsg bonus_all
+bonus: bprep bonus_all
 
-bmsg:
+bprep:
+	@make -C $(word 1, $(LIB_DIRS)) fclean
+	@make -C $(word 1, $(LIB_DIRS)) bonus
 	@echo "BONUS TESTS"
 
 bonus_all: $(BONUS_FLAGS)
 
-$(BONUS_FLAGS): $(BUILDER) $(TEST_SOURCES) $(LIB_AFNAMES) $(COMPARE)
+$(BONUS_FLAGS): $(BUILDER) $(TEST_SOURCES) $(COMPARE)
 	@./$(BUILDER) $(patsubst bonus_test_%.c, %, $@) \
 		&& chmod u+rw auto_test.c \
 		&& mv auto_test.c $@
