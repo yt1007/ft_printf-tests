@@ -6,7 +6,7 @@
 #    By: yetay <yetay@student.42kl.edu.my>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/06/20 13:36:13 by yetay             #+#    #+#              #
-#    Updated: 2023/07/10 12:58:49 by yetay            ###   ########.fr        #
+#    Updated: 2023/07/10 13:03:31 by yetay            ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -46,7 +46,7 @@ TEST_OUTFILES = printf.out printf.ret ft_printf.out ft_printf.ret
 
 .PHONY: all mandatory mprep $(MANDATORY_FLAGS) \
 	bonus bprep $(BONUS_SETS) $(BONUS_FLAGS) \
-	$(CONVERSION_FLAGS) fclean
+	clean fclean re
 
 all: mandatory bonus
 
@@ -57,7 +57,7 @@ mprep:
 	@make -C $(word 1, $(LIB_DIRS))
 	@echo "MANDATORY TESTS"
 
-$(MANDATORY_FLAGS): %: %/test.c $(TEST_SOURCES) $(LIB_AFNAMES) $(COMPARE)
+$(MANDATORY_FLAGS): %: %/test.c $(TEST_SOURCES) $(COMPARE)
 	@$(CC) $(CFLAGS) $(TEST_CFLAGS) $(INCLUDES) $(USE_LIBS) \
 		-o $(NAME) $(TEST_SOURCES) $< \
 		&& ./$(NAME) \
@@ -86,12 +86,6 @@ $(BONUS_FLAGS): $(BUILDER) $(TEST_SOURCES) $(COMPARE)
 		&& $(RM) $(NAME) $(NAME).dSYM
 	@./$(COMPARE) $(patsubst bonus_test_%.c, bonus_%, $@) \
 		&& bash rename.sh $(patsubst bonus_test_%.c, bonus_%, $@)
-
-$(word 1, $(LIB_AFNAMES)): $(word 1, $(LIB_DIRS))
-	@make -C $(word 1, $(LIB_DIRS))
-
-$(word 2, $(LIB_AFNAMES)): $(word 2, $(LIB_DIRS))
-	@make -C $(word 2, $(LIB_DIRS))
 
 $(BUILDER): %: %.c $(UTIL_SOURCES)
 	@$(CC) -I. $(UTIL_SOURCES) -o $@ $<
