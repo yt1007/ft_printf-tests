@@ -6,7 +6,7 @@
 #    By: yetay <yetay@student.42kl.edu.my>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/06/20 13:36:13 by yetay             #+#    #+#              #
-#    Updated: 2023/07/10 12:56:32 by yetay            ###   ########.fr        #
+#    Updated: 2023/07/10 12:58:49 by yetay            ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -66,7 +66,7 @@ $(MANDATORY_FLAGS): %: %/test.c $(TEST_SOURCES) $(LIB_AFNAMES) $(COMPARE)
 	@./$(COMPARE) $(patsubst mandatory/%, mandatory_%, $@) \
 		&& bash rename.sh $(patsubst mandatory/%, mandatory_%, $@)
 
-bonus: bprep bonus_all
+bonus: bprep $(MANDATORY_FLAGS) bonus_all
 
 bprep:
 	@make -C $(word 1, $(LIB_DIRS)) fclean
