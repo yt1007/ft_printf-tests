@@ -6,7 +6,7 @@
 /*   By: yetay <yetay@student.42kl.edu.my>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/06 11:12:57 by yetay             #+#    #+#             */
-/*   Updated: 2023/07/07 10:59:11 by yetay            ###   ########.fr       */
+/*   Updated: 2023/07/07 17:54:56 by yetay            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,7 +73,7 @@ static void	var_builder(char f, int fd)
 	if (f == 'c')
 		write(fd, "'C'", 3);
 	else if (f == 's' || f == 'p')
-		write(fd, "\"A string.\"", 11);
+		write(fd, "\"A\"", 3);
 	else
 		write(fd, "42", 2);
 	write(fd, ";\n", 2);
