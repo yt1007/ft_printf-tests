@@ -6,7 +6,7 @@
 #    By: yetay <yetay@student.42kl.edu.my>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/06/20 13:36:13 by yetay             #+#    #+#              #
-#    Updated: 2023/07/10 13:05:57 by yetay            ###   ########.fr        #
+#    Updated: 2023/07/10 13:52:55 by yetay            ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -101,6 +101,5 @@ clean:
 
 fclean: clean
 	@make -C $(word 1, $(LIB_DIRS)) fclean
-	@make -C $(word 2, $(LIB_DIRS)) fclean
 
 re: fclean mandatory
