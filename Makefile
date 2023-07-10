@@ -6,7 +6,7 @@
 #    By: yetay <yetay@student.42kl.edu.my>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/06/20 13:36:13 by yetay             #+#    #+#              #
-#    Updated: 2023/07/10 13:03:31 by yetay            ###   ########.fr        #
+#    Updated: 2023/07/10 13:05:57 by yetay            ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -48,8 +48,6 @@ TEST_OUTFILES = printf.out printf.ret ft_printf.out ft_printf.ret
 	bonus bprep $(BONUS_SETS) $(BONUS_FLAGS) \
 	clean fclean re
 
-all: mandatory bonus
-
 mandatory: mprep $(MANDATORY_FLAGS)
 
 mprep:
@@ -65,6 +63,8 @@ $(MANDATORY_FLAGS): %: %/test.c $(TEST_SOURCES) $(COMPARE)
 		&& $(RM) $(NAME) $(NAME).dSYM
 	@./$(COMPARE) $(patsubst mandatory/%, mandatory_%, $@) \
 		&& bash rename.sh $(patsubst mandatory/%, mandatory_%, $@)
+
+all: bonus
 
 bonus: bprep $(MANDATORY_FLAGS) bonus_all
 
