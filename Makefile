@@ -6,7 +6,7 @@
 #    By: yetay <yetay@student.42kl.edu.my>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/06/20 13:36:13 by yetay             #+#    #+#              #
-#    Updated: 2023/07/10 13:52:55 by yetay            ###   ########.fr        #
+#    Updated: 2023/07/10 14:07:17 by yetay            ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -45,7 +45,7 @@ BONUS_FLAGS = $(foreach f, $(CONVERSION_FLAGS), bonus_test_$(f).c)
 TEST_OUTFILES = printf.out printf.ret ft_printf.out ft_printf.ret
 
 .PHONY: all mandatory mprep $(MANDATORY_FLAGS) \
-	bonus bprep $(BONUS_SETS) $(BONUS_FLAGS) \
+	bonus bprep $(BONUS_SETS) $(BONUS_FLAGS) bonus_misc \
 	clean fclean re
 
 mandatory: mprep $(MANDATORY_FLAGS)
@@ -73,7 +73,7 @@ bprep:
 	@make -C $(word 1, $(LIB_DIRS)) bonus
 	@echo "BONUS TESTS"
 
-bonus_all: $(BONUS_FLAGS)
+bonus_all: $(BONUS_FLAGS) bonus_misc
 
 $(BONUS_FLAGS): $(BUILDER) $(TEST_SOURCES) $(COMPARE)
 	@./$(BUILDER) $(patsubst bonus_test_%.c, %, $@) \
@@ -89,6 +89,15 @@ $(BONUS_FLAGS): $(BUILDER) $(TEST_SOURCES) $(COMPARE)
 
 $(BUILDER): %: %.c $(UTIL_SOURCES)
 	@$(CC) -I. $(UTIL_SOURCES) -o $@ $<
+
+bonus_misc: bonus_test_misc.c
+	@$(CC) $(CFLAGS) $(TEST_CFLAGS) $(INCLUDES) $(USE_LIBS) \
+		-o $(NAME) $(TEST_SOURCES) $^ \
+		&& ./$(NAME) \
+		&& chmod u+rw $(TEST_OUTFILES) \
+		&& $(RM) $(NAME) $(NAME).dSYM
+	@./$(COMPARE) bonus_misc \
+		&& bash rename.sh bonus_misc
 
 $(COMPARE): %: %.c
 	@$(CC) $(CFLAGS) $(TEST_CFLAGS) -o $@ $<
